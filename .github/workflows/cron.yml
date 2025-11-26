@@ -1,0 +1,20 @@
+name: X7K9 BTC Signal Trigger
+on:
+  schedule:
+    - cron: '*/15 * * * *'  # 每15分钟 UTC 时间触发
+  workflow_dispatch:  # 允许手动触发测试
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Vercel API
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://x7k9-signal.vercel.app/api/run)
+          echo "HTTP Status: $response"
+          if [ "$response" != "200" ]; then
+            echo "❌ API call failed!"
+            exit 1
+          else
+            echo "✅ Signal triggered successfully"
+          fi
