@@ -1,8 +1,16 @@
 {
-  "crons": [
+  "version": 2,
+  "builds": [
+    { "src": "api/run.py", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/run", "dest": "api/run.py" }
+  ],
+  "cronJobs": [
     {
-      "path": "/api/run",
-      "schedule": "*/15 * * * *"
+      "name": "X7K9 Signal",
+      "schedule": "*/15 * * * *",
+      "route": "/api/run"
     }
   ]
 }
