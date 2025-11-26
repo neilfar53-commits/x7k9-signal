@@ -1,5 +1,5 @@
 # api/run.py
-# X7K9-ALPHA-BTC-2025 v4.1
+# X7K9-ALPHA-BTC-2025 v4.1 (Vercel 兼容版)
 import os
 import json
 import time
@@ -167,5 +167,20 @@ def main():
         action = f"\n🎯 *建议*: 手动在 OKX App 开多仓，挂止盈 {target:,.0f} (+2.2%)，止损 {stop:,.0f} (-2.1%)"
         send_telegram(action)
 
-if __name__ == "__main__":
+# ==============================
+# ✅ Vercel Serverless Function 入口（关键！）
+# ==============================
+def handler(event, context):
+    """Vercel 调用的入口函数"""
     main()
+    return {
+        "statusCode": 200,
+        "body": json.dumps({
+            "status": "ok",
+            "message": "X7K9-ALPHA-BTC-2025 executed successfully"
+        })
+    }
+
+# ❌ 删除或注释掉以下两行（Vercel 不会执行它们）
+# if __name__ == "__main__":
+#     main()
