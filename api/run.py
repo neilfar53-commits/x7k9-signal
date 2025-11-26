@@ -1,11 +1,9 @@
 # api/run.py
-# X7K9-ALPHA-BTC-2025 v4.1 (Vercel 兼容增强版)
 import os
 import json
 import requests
 from datetime import datetime
 
-# === 安全获取环境变量 ===
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
@@ -69,7 +67,6 @@ def get_coinglass_data():
         'mvrv_z': None
     }
 
-    # 所有请求 timeout ≤ 4s，避免超时
     try:
         res = requests.get(f"{base}/Position/longShortChart?symbol=BTC", headers=headers, timeout=4)
         data = safe_get(res.json(), 'data')
@@ -134,7 +131,8 @@ def check_news_alert():
         pass
     return False, ""
 
-def main():
+def run_logic():
+    """核心逻辑函数，避免与 Vercel 的 handler 冲突"""
     print(f"[{datetime.now()}] 开始执行 X7K9-ALPHA-BTC-2025 v4.1")
     
     event_triggered, event_title = check_news_alert()
@@ -187,11 +185,11 @@ def main():
         send_telegram(action)
 
 # ==============================
-# ✅ Vercel 入口：带异常捕获
+# ✅ Vercel 入口：唯一函数，不与其他函数冲突
 # ==============================
 def handler(event, context):
     try:
-        main()
+        run_logic()
         return {
             "statusCode": 200,
             "headers": {"Content-Type": "application/json"},
