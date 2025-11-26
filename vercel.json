@@ -1,7 +1,7 @@
 {
   "version": 2,
   "builds": [
-    { "src": "api/run.py", "use": "@vercel/node" }
+    { "src": "api/run.py", "use": "@vercel/python" }
   ],
   "routes": [
     { "src": "/api/run", "dest": "api/run.py" }
